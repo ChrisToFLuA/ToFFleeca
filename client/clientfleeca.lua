@@ -55,7 +55,8 @@ AddEventHandler('toffleeca:menuslspd', function()
 
     Citizen.CreateThread(function()
         local bankslspd = {
-            {zone = 'Bank1lspd', coordzone = vector3(-1210.8, -336.52, 36.78), long = 1.0, larg = 1.0, headingzone = 306.63, minz = 36.78, maxz = 39.78, coordtp = vector3(-1215.46, -337.27, 36.78)},    
+            {zone = 'Bank1lspd', coordzone = vector3(-1210.8, -336.52, 36.78), long = 1.0, larg = 1.0, headingzone = 306.63, minz = 36.78, maxz = 39.78},    
+            {zone = 'Bank2lspd', coordzone = vector3(-353.79, -55.35, 48.04), long = 1.0, larg = 1.0, headingzone = 237.18, minz = 48.04, maxz = 51.04},    
         }
     
         for w = 1, #bankslspd, 1 do
@@ -101,6 +102,7 @@ AddEventHandler('toffleeca:menus', function()
 
     local banks = {
         {zone = 'Bank1', coordzone = vector3(-1210.8, -336.52, 36.78), long = 1.0, larg = 1.0, headingzone = 306.63, minz = 36.78, maxz = 39.78, coordtp = vector3(-1215.46, -337.27, 36.78)},    
+        {zone = 'Bank2', coordzone = vector3(-353.79, -55.35, 48.04), long = 1.0, larg = 1.0, headingzone = 237.18, minz = 48.04, maxz = 51.04, coordtp = vector3(-357.89, -52.53, 48.04)},    
     }
 
     for i = 1, #banks, 1 do
@@ -161,9 +163,11 @@ AddEventHandler('toffleeca:menus', function()
     end
 ----------------------------------------------- Zones 2 -----------------------------------------------------
     local bankszone2 = {
-        {zone = 'Bank1 - zone2', coordzone = vector3(-1207.47, -333.71, 36.76), long = 5, larg = 1, headingzone = 294.27, minz = 36.76, maxz = 39.77},
-        {zone = 'Bank1 - zone3', coordzone = vector3(-1209.71, -333.69, 36.76), long = 5, larg = 1, headingzone = 19.84, minz = 36.76, maxz = 39.77},
-    }
+        {zone = 'Bank1 - zone2', coordzone = vector3(-1207.47, -333.71, 36.76), long = 1, larg = 3, headingzone = 294.27, minz = 36.76, maxz = 39.77},
+        {zone = 'Bank1 - zone3', coordzone = vector3(-1209.71, -333.69, 36.76), long = 1, larg = 3, headingzone = 19.84, minz = 36.76, maxz = 39.77},
+        {zone = 'Bank2 - zone2', coordzone = vector3(-349.52, -55.77, 48.01), long = 1, larg = 3, headingzone = 278.78, minz = 48.01, maxz = 51.01},
+        {zone = 'Bank2 - zone3', coordzone = vector3(-351.02, -54.05, 48.01), long = 1, larg = 3, headingzone = 340.87, minz = 48.01, maxz = 51.01},
+    }    
 
     for j = 1, #bankszone2, 1 do
 
@@ -205,8 +209,10 @@ AddEventHandler('toffleeca:menus', function()
 
 ----------------------------------------------- Zones 3 -----------------------------------------------------
 local bankszone2 = {
-    {zone = 'Bank1 - zone4', coordzone = vector3(-1205.42, -336.51, 36.76), long = 5, larg = 1, headingzone = 307.15, minz = 36.76, maxz = 39.77},
-    {zone = 'Bank1 - zone5', coordzone = vector3(-1206.49, -338.84, 36.76), long = 5, larg = 1, headingzone = 195.65, minz = 36.76, maxz = 39.77},
+    {zone = 'Bank1 - zone4', coordzone = vector3(-1205.42, -336.51, 36.76), long = 1, larg = 3, headingzone = 307.15, minz = 36.76, maxz = 39.77},
+    {zone = 'Bank1 - zone5', coordzone = vector3(-1206.49, -338.84, 36.76), long = 1, larg = 3, headingzone = 195.65, minz = 36.76, maxz = 39.77},
+    {zone = 'Bank2 - zone4', coordzone = vector3(-352.62, -58.85, 48.01), long = 1, larg = 3, headingzone = 161.83, minz = 48.01, maxz = 51.01},
+    {zone = 'Bank2 - zone5', coordzone = vector3(-350.13, -59.18, 48.01), long = 1, larg = 3, headingzone = 250.83, minz = 48.01, maxz = 51.01},
 }
 
 for k = 1, #bankszone2, 1 do
