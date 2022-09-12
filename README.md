@@ -19,7 +19,7 @@ Hi all, an handmade script about Fleeca Robbery
 
 two different zones to loot whith different item
 ### first zone (black_money, jewels, cards)
-The door to access too the second room need to be forced too
+The door to access to the second room need to be forced too
 ### second room (goldingots)
 
 # Qtarget menus 
