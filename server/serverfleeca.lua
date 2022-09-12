@@ -4,7 +4,13 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 local mincops = 0  --- nb minimum de lspd en ville
 local lastrob = 0
 local nextrob = 0
-local cd = 3600000 --- cooldown entre 2 braquages
+local cd = 3600000 --- cooldown
+---------------------------------------------------------------------------------
+
+-- ** qtarget documentation : https://overextended.github.io/qtarget/model.html
+-- ** ox_inventory documentation : https://overextended.github.io/docs
+-- ** ox_lib documentation : https://overextended.github.io/docs
+
 ---------------------------------------------------------------------------------
 
 RegisterServerEvent('toffleeca:timers')
@@ -32,7 +38,7 @@ AddEventHandler('toffleeca:nbcops', function(source, coords, coordsearch)
 
 	for i=1, #xPlayers, 1 do
 		local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
-		if xPlayer.job.name == 'police' or xPlayer.job.name == 'offpolice' then
+		if xPlayer.job.name == 'police' or xPlayer.job.name == 'offpolice' then     -- modify here if you want or not take care about the offpolice
 			copsOnline = copsOnline + 1
 		end
 	end
@@ -41,7 +47,7 @@ AddEventHandler('toffleeca:nbcops', function(source, coords, coordsearch)
         lastrob = GetGameTimer()
         for j=1, #xPlayers, 1 do
             local xPlayer = ESX.GetPlayerFromId(xPlayers[j])
-            if xPlayer.job.name == 'police' or xPlayer.job.name == 'offpolice' then
+            if xPlayer.job.name == 'police' or xPlayer.job.name == 'offpolice' then     -- modify here if you want or not take care about the offpolice
                 TriggerClientEvent('toffleeca:msgpolice', xPlayer.source, coords)
             end
         end
@@ -54,28 +60,24 @@ end)
 RegisterServerEvent('toffleeca:card')
 AddEventHandler('toffleeca:card', function(source, coordsearch)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local card = exports.ox_inventory:GetItem(source, 'id_card_f', nil, false)
+    local card = exports.ox_inventory:GetItem(source, 'id_card_f', nil, false)      -- check id_card_f count
     if card.count > 0 then
         TriggerClientEvent('toffleeca:usecard', xPlayer.source, coordsearch)
-		exports.ox_inventory:RemoveItem(xPlayer.source, 'id_card_f', 1)
-		print('card ok')
+		exports.ox_inventory:RemoveItem(xPlayer.source, 'id_card_f', 1)     -- remove id_card_f from inventory player
     else
-        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Vous n\'avez pas de Carte d\'identification')      
-		print('card ko')
+        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Vous n\'avez pas de Carte d\'identification')       -- notification no card     
     end
 end)
 
 RegisterServerEvent('toffleeca:thermal')
 AddEventHandler('toffleeca:thermal', function(entity, coordtp, coordsearch)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local thermal = exports.ox_inventory:GetItem(source, 'thermalcharge', nil, false)
+    local thermal = exports.ox_inventory:GetItem(source, 'thermalcharge', nil, false)       -- check thermalcharge count
     if thermal.count > 1 then
         TriggerClientEvent('toffleeca:usethermal', xPlayer.source, entity, coordtp, coordsearch)
-		exports.ox_inventory:RemoveItem(xPlayer.source, 'thermalcharge', 2)
-		print('thermal ok')
+		exports.ox_inventory:RemoveItem(xPlayer.source, 'thermalcharge', 2)         -- remove thermalcharge from inventory
     else
-        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Vous n\'avez pas assez de charges thermales')      
-		print('thermal ko')
+        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Vous n\'avez pas assez de charges thermales')       -- notification no thermalcharge
     end
 end)
 
@@ -113,8 +115,8 @@ AddEventHandler('toffleeca:loot_s', function(chance)
         TriggerClientEvent('toffleeca:noloot_c', xPlayer.source)
     end
     if chance < 8 and chance > 5 then
-        local item = 'Cartes d\'identification'
-        if exports.ox_inventory:CanCarryItem(xPlayer.source, 'id_card_f', count) then
+        local item = 'Cartes d\'identification'     -- label item id_card_f
+        if exports.ox_inventory:CanCarryItem(xPlayer.source, 'id_card_f', count) then       -- check cancarry items
             exports.ox_inventory:AddItem(xPlayer.source, 'id_card_f', count)
             TriggerClientEvent('toffleeca:loot_c', xPlayer.source, item, count)
         else
@@ -122,8 +124,8 @@ AddEventHandler('toffleeca:loot_s', function(chance)
         end
     end
     if chance < 13 and chance > 7 then
-        local item = 'Bijoux'
-        if exports.ox_inventory:CanCarryItem(xPlayer.source, 'jewels', count) then
+        local item = 'Bijoux'       -- label item jewels
+        if exports.ox_inventory:CanCarryItem(xPlayer.source, 'jewels', count) then      -- check cancarry items
             exports.ox_inventory:AddItem(xPlayer.source, 'jewels', count)
             TriggerClientEvent('toffleeca:loot_c', xPlayer.source, item, count)
         else
@@ -131,7 +133,7 @@ AddEventHandler('toffleeca:loot_s', function(chance)
         end
     end
     if chance < 21 and chance > 12 then
-        local countMoney = math.random(10513, 11012)
+        local countMoney = math.random(10513, 11012)        -- how many black_money earn for 1 loot
         xPlayer.addAccountMoney('black_money', countMoney)
         TriggerClientEvent('toffleeca:lootmoney_c', xPlayer.source, countMoney)
     end
@@ -145,8 +147,8 @@ AddEventHandler('toffleeca:loot2_s', function(chance2)
         TriggerClientEvent('toffleeca:noloot_c', xPlayer.source)
     end
     if chance2 > 7 then
-        local item = 'Lingots Or'
-        if exports.ox_inventory:CanCarryItem(xPlayer.source, 'goldingot', count) then
+        local item = 'Lingots Or'       -- label item goldingot
+        if exports.ox_inventory:CanCarryItem(xPlayer.source, 'goldingot', count) then       -- check cancarry item
             exports.ox_inventory:AddItem(xPlayer.source, 'goldingot', count)
             TriggerClientEvent('toffleeca:loot_c', xPlayer.source, item, count)
         else
