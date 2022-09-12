@@ -4,6 +4,8 @@ Fleeca Robbery
 Hi all, an handmade script about Fleeca Robbery
 - Resmon 0.00ms to 0.01ms
 
+Preview Video : https://youtu.be/rW0WUJtRnpI
+
 # Dependencies
 - Esx Legacy (wasn't test on older verions)
 - Qtarget - https://github.com/overextended/qtarget - Documentation : https://overextended.github.io/qtarget/usage
