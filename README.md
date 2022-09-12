@@ -6,10 +6,10 @@ Hi all, an handmade script about Fleeca Robbery
 
 # Dependencies
 - Esx Legacy (wasn't test on older verions)
-- Qtarget
-- Polyzone
-- ox_inventory
-- ox_lib
+- Qtarget - https://github.com/overextended/qtarget - Documentation : https://overextended.github.io/qtarget/usage
+- Polyzone - https://github.com/mkafrin/PolyZone
+- ox_inventory - https://github.com/overextended/ox_inventory - Documentation : https://overextended.github.io/docs/ox_inventory/
+- ox_lib - https://github.com/overextended/ox_lib - Documentation : https://overextended.github.io/docs/ox_lib
 
 # Item used for the robbery
 - 1x id_card_f
@@ -17,7 +17,7 @@ Hi all, an handmade script about Fleeca Robbery
 - jewels
 - goldingots
 
-two different zones to loot whith different item
+two different zones to loot whith different items
 ### first zone (black_money, jewels, cards)
 The door to access to the second room need to be forced too
 ### second room (goldingots)
