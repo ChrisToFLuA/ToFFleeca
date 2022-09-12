@@ -16,6 +16,8 @@ Hi all, an handmade script about Fleeca Robbery
 - 2x thermalcharge
 - jewels
 - goldingots
+- black money
+it can be easily modified in the server file
 
 two different zones to loot whith different items
 ### first zone (black_money, jewels, cards)
