@@ -7,7 +7,7 @@ name         'toffleeca'
 version      '1.0.0'
 description  'Fleeca Robbery system'
 author       'ChrisToF29380'
-repository   'https://github.com/LifeIsRoleplay/ToFFleeca'
+repository   'https://github.com/ChrisToFLuA/ToFFleeca'
 
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',
