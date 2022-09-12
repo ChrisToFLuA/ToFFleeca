@@ -26,30 +26,38 @@ AddEventHandler('esx:playerLoaded', function(xPlayer)
 	ESX.PlayerData = xPlayer
 end)
 
-------------- jobs qui ne chargeront pas le menu qtarget -----------------------
+-- ** qtarget documentation : https://overextended.github.io/qtarget/model.html
+-- ** ox_inventory documentation : https://overextended.github.io/docs
+-- ** ox_lib documentation : https://overextended.github.io/docs
+
+------------------------------------------------------------------------------
+---------------------- launch menus depending on the job ---------------------
+------------------------------------------------------------------------------
+
 AddEventHandler('esx:onPlayerSpawn', function()
     Citizen.Wait(30000)
     Citizen.CreateThread(function()
-
+        -- you can modify / add jobs here --
         local jobs = {
-            {name = 'police'},
-            {name = 'offpolice'},
-            {name = 'ambulance'},
-            {name = 'offambulance'},
+            {name = 'police'},          -- LSPD in service
+            {name = 'offpolice'},       -- LSPD out of service
+            {name = 'ambulance'},       -- EMS in service
+            {name = 'offambulance'},    -- EMS out of service
         }
         for a = 1, #jobs, 1 do
             local jobsname = jobs[a].name
-            if ESX.PlayerData.job.name ~= jobsname then
-                TriggerEvent('toffleeca:menus')
+            if ESX.PlayerData.job.name ~= jobsname then     -- test on jobname
+                TriggerEvent('toffleeca:menus')             -- call menu qtarget robbery
             else
-                TriggerEvent('toffleeca:menuslspd')
+                TriggerEvent('toffleeca:menuslspd')         -- call menu qtarget lspd
             end
         end
     end)
 end)
 
-------------- menu qtarget lspd ------------------
-
+------------------------------------------------------------------------------
+---------------------------- menu qtarget LSPD -------------------------------
+------------------------------------------------------------------------------
 RegisterNetEvent('toffleeca:menuslspd')
 AddEventHandler('toffleeca:menuslspd', function()
 
@@ -57,6 +65,7 @@ AddEventHandler('toffleeca:menuslspd', function()
         local bankslspd = {
             {zone = 'Bank1lspd', coordzone = vector3(-1210.8, -336.52, 36.78), long = 1.0, larg = 1.0, headingzone = 306.63, minz = 36.78, maxz = 39.78},    
             {zone = 'Bank2lspd', coordzone = vector3(-353.79, -55.35, 48.04), long = 1.0, larg = 1.0, headingzone = 237.18, minz = 48.04, maxz = 51.04},    
+            {zone = 'Bank3lspd', coordzone = vector3(311.25, -284.45, 53.16), long = 1.0, larg = 1.0, headingzone = 246.87, minz = 53.16, maxz = 56.16},    
         }
     
         for w = 1, #bankslspd, 1 do
@@ -90,22 +99,26 @@ AddEventHandler('toffleeca:menuslspd', function()
         end    
     end)
 end)
-
-------------- menu qtarget -----------------------
+------------------------------------------------------------------------------
+---------------------------- menu qtarget robbery ----------------------------
+------------------------------------------------------------------------------
 
 RegisterNetEvent('toffleeca:menus')
 AddEventHandler('toffleeca:menus', function()
 
     Citizen.CreateThread(function()
 
------------------------------------------------ Zones 1 -----------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------------
+    -------------------------------------------- Hacking zones --------------------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------------
 
     local banks = {
         {zone = 'Bank1', coordzone = vector3(-1210.8, -336.52, 36.78), long = 1.0, larg = 1.0, headingzone = 306.63, minz = 36.78, maxz = 39.78, coordtp = vector3(-1215.46, -337.27, 36.78)},    
         {zone = 'Bank2', coordzone = vector3(-353.79, -55.35, 48.04), long = 1.0, larg = 1.0, headingzone = 237.18, minz = 48.04, maxz = 51.04, coordtp = vector3(-357.89, -52.53, 48.04)},    
+        {zone = 'Bank3', coordzone = vector3(311.25, -284.45, 53.16), long = 1.0, larg = 1.0, headingzone = 246.87, minz = 53.16, maxz = 56.16, coordtp = vector3(307.36, -281.31, 53.16)},    
     }
 
-    for i = 1, #banks, 1 do
+    for i = 1, #banks, 1 do -- start loop
         local zone = banks[i].zone
         local coord = banks[i].coordzone
         local long = banks[i].long
@@ -125,20 +138,20 @@ AddEventHandler('toffleeca:menus', function()
 		        options = {
 			        {
 				        icon = "fas fa-sign-in-alt",
-				        label = "Piratage",
+				        label = "Piratage", -- hacking (step one)
                         action = function(entity)
-                            TriggerServerEvent('toffleeca:timers', coord)
+                            TriggerServerEvent('toffleeca:timers', coord) -- verify the cooldown
                         end,
 		    	    },			    
 		        },
-		        distance = 1
+		        distance = 1.5
         })
 
         exports.qtarget:AddTargetModel({2121050683}, {
 	        options = {
 		        {
 			        icon = "fas fa-box-circle-check",
-			        label = "Utiliser Thermite",
+			        label = "Utiliser Thermite", -- use thermal charge on the door (step two)
                     action = function(entity)
                         local coordsearch = GetEntityCoords(PlayerPedId())
                         TriggerEvent('toffleeca:usethermalverif', entity, coordtp, coordsearch)
@@ -149,27 +162,33 @@ AddEventHandler('toffleeca:menus', function()
         })
     
     end
+    -------------------------------------------------------------------------
     ---------------------- create blips on map ------------------------------
+    -------------------------------------------------------------------------
     for z = 1,#banks,1 do
       local blip = AddBlipForCoord(banks[z].coordzone)  
-      SetBlipSprite(blip, 568)
-      SetBlipScale(blip, 0.65)
-      SetBlipColour(blip, 5)
+      SetBlipSprite(blip, 568)  -- change blip sprite ** https://docs.fivem.net/docs/game-references/blips/
+      SetBlipScale(blip, 0.65)  -- change blip scale
+      SetBlipColour(blip, 5)    -- change blip color
       SetBlipAsShortRange(blip, true)
   
       BeginTextCommandSetBlipName('STRING')
-      AddTextComponentSubstringPlayerName('Coffre Banque')
+      AddTextComponentSubstringPlayerName('Coffre Banque') -- name of blip
       EndTextCommandSetBlipName(blip)
     end
------------------------------------------------ Zones 2 -----------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------------
+    -------------------------------------------- Room behind vault door -----------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------------
     local bankszone2 = {
-        {zone = 'Bank1 - zone2', coordzone = vector3(-1207.47, -333.71, 36.76), long = 1, larg = 3, headingzone = 294.27, minz = 36.76, maxz = 39.77},
-        {zone = 'Bank1 - zone3', coordzone = vector3(-1209.71, -333.69, 36.76), long = 1, larg = 3, headingzone = 19.84, minz = 36.76, maxz = 39.77},
-        {zone = 'Bank2 - zone2', coordzone = vector3(-349.52, -55.77, 48.01), long = 1, larg = 3, headingzone = 278.78, minz = 48.01, maxz = 51.01},
-        {zone = 'Bank2 - zone3', coordzone = vector3(-351.02, -54.05, 48.01), long = 1, larg = 3, headingzone = 340.87, minz = 48.01, maxz = 51.01},
+        {zone = 'Bank1 - zone2', coordzone = vector3(-1207.47, -333.71, 36.76), long = 2, larg = 1, headingzone = 294.27, minz = 36.76, maxz = 39.77},
+        {zone = 'Bank1 - zone3', coordzone = vector3(-1209.71, -333.69, 36.76), long = 3, larg = 1, headingzone = 19.84, minz = 36.76, maxz = 39.77},
+        {zone = 'Bank2 - zone2', coordzone = vector3(-349.52, -55.77, 48.01), long = 2, larg = 1, headingzone = 278.78, minz = 48.01, maxz = 51.01},
+        {zone = 'Bank2 - zone3', coordzone = vector3(-351.02, -54.05, 48.01), long = 3, larg = 1, headingzone = 340.87, minz = 48.01, maxz = 51.01},
+        {zone = 'Bank3 - zone2', coordzone = vector3(315.5, -284.82, 53.14), long = 2, larg = 1, headingzone = 246.94, minz = 53.14, maxz = 56.14},
+        {zone = 'Bank3 - zone3', coordzone = vector3(314.2, -283.29, 53.14), long = 3, larg = 1, headingzone = 342.94, minz = 53.14, maxz = 56.14},
     }    
 
-    for j = 1, #bankszone2, 1 do
+    for j = 1, #bankszone2, 1 do -- start loop
 
         exports.qtarget:AddBoxZone(bankszone2[j].zone, bankszone2[j].coordzone, bankszone2[j].long, bankszone2[j].larg, {
 	        name=zone,
@@ -187,11 +206,13 @@ AddEventHandler('toffleeca:menus', function()
                         end,
 			        },			    
 		        },
-		        distance = 1
+		        distance = 1.5
         })        
-    end
+    end -- end loop
 
------------------------------------------------ Serrure -----------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------------
+    -------------------------------------- force lock to access the second room ---------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------------
     
     exports.qtarget:AddTargetModel({-1591004109}, {
         options = {
@@ -207,46 +228,54 @@ AddEventHandler('toffleeca:menus', function()
         distance = 2
     })
 
------------------------------------------------ Zones 3 -----------------------------------------------------
-local bankszone2 = {
-    {zone = 'Bank1 - zone4', coordzone = vector3(-1205.42, -336.51, 36.76), long = 1, larg = 3, headingzone = 307.15, minz = 36.76, maxz = 39.77},
-    {zone = 'Bank1 - zone5', coordzone = vector3(-1206.49, -338.84, 36.76), long = 1, larg = 3, headingzone = 195.65, minz = 36.76, maxz = 39.77},
-    {zone = 'Bank2 - zone4', coordzone = vector3(-352.62, -58.85, 48.01), long = 1, larg = 3, headingzone = 161.83, minz = 48.01, maxz = 51.01},
-    {zone = 'Bank2 - zone5', coordzone = vector3(-350.13, -59.18, 48.01), long = 1, larg = 3, headingzone = 250.83, minz = 48.01, maxz = 51.01},
-}
+    -------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------- Second Room -----------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------------
 
-for k = 1, #bankszone2, 1 do
+    local bankszone2 = {
+        {zone = 'Bank1 - zone4', coordzone = vector3(-1205.42, -336.51, 36.76), long = 4, larg = 1, headingzone = 307.15, minz = 36.76, maxz = 39.77},
+        {zone = 'Bank1 - zone5', coordzone = vector3(-1206.49, -338.84, 36.76), long = 4, larg = 1, headingzone = 195.65, minz = 36.76, maxz = 39.77},
+        {zone = 'Bank2 - zone4', coordzone = vector3(-352.87, -59.84, 48.01), long = 4, larg = 1, headingzone = 154.85, minz = 48.01, maxz = 51.01},
+        {zone = 'Bank2 - zone5', coordzone = vector3(-350.13, -59.18, 48.01), long = 4, larg = 1, headingzone = 250.83, minz = 48.01, maxz = 51.01},
+    }
 
-    exports.qtarget:AddBoxZone(bankszone2[k].zone, bankszone2[k].coordzone, bankszone2[k].long, bankszone2[k].larg, {
-        name=zone,
-        heading=bankszone2[k].headingzone,
-        debugPoly=false,
-        minZ=bankszone2[k].minz,  
-        maxZ=bankszone2[k].maxz,
-        }, {
-            options = {
-                {
-                    icon = "fas fa-sign-in-alt",
-                    label = "Forcer coffre",
-                    action = function(entity)
-                        TriggerEvent('toffleeca:forcecoffre2')
-                    end,
-                },			    
-            },
-            distance = 1
-    })    
-end
+    for k = 1, #bankszone2, 1 do -- start loop
+
+        exports.qtarget:AddBoxZone(bankszone2[k].zone, bankszone2[k].coordzone, bankszone2[k].long, bankszone2[k].larg, {
+            name=zone,
+            heading=bankszone2[k].headingzone,
+            debugPoly=false,
+            minZ=bankszone2[k].minz,  
+            maxZ=bankszone2[k].maxz,
+            }, {
+                options = {
+                    {
+                        icon = "fas fa-sign-in-alt",
+                        label = "Forcer coffre",
+                        action = function(entity)
+                            TriggerEvent('toffleeca:forcecoffre2')
+                        end,
+                    },			    
+                },
+                distance = 1.5
+        })    
+    end -- end loop
 
     end)
 end)
 
--------------------- AntiSpam ---------------------------------------------
+
+    -------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------- anti spam loot-------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------------
 
 local function SetnextCoffre()
     nextCoffre = GetGameTimer() + 36000
 end
 
--------------------- Ouverture Porte --------------------------------------
+---------------------------------------------------------------------------------------
+---------------------------------- Doors Opening --------------------------------------
+---------------------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:opendoorsearchlspd_c")
 AddEventHandler("toffleeca:opendoorsearchlspd_c", function(coordsearch)
@@ -313,7 +342,9 @@ AddEventHandler("toffleeca:opendoor_c", function(door)
     TriggerServerEvent('toffleeca:closedoor_s', door)
 end)
 
--------------------- Fermeture Porte --------------------------------------
+---------------------------------------------------------------------------------------
+---------------------------------- Doors Closing --------------------------------------
+---------------------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:closedoor_c")
 AddEventHandler("toffleeca:closedoor_c", function(door)
@@ -327,7 +358,7 @@ AddEventHandler("toffleeca:closedoor_c", function(door)
         until count == 14400
 end)
 
--------------------- Etape_1 --------------------------------------
+-------------------- Step_1 --------------------------------------
 
 RegisterNetEvent("toffleeca:usecard")
 AddEventHandler("toffleeca:usecard", function()
@@ -373,7 +404,7 @@ AddEventHandler("toffleeca:codechiffre", function()
     ------------------**fin notification**-----------------
 end)
 
--------------------- Etape_2 --------------------------------------
+-------------------- Step_2 --------------------------------------
 
 RegisterNetEvent("toffleeca:usethermalverif")
 AddEventHandler("toffleeca:usethermalverif", function(entity, coordtp, coordsearch)
@@ -410,7 +441,7 @@ AddEventHandler("toffleeca:usethermal", function(entity, coordtp, coordsearch)
         local ped = PlayerPedId()
         FreezeEntityPosition(ped, true)
         local x, y, z = table.unpack(GetEntityCoords(ped))
-    ---------------------------------------- Charge 1 -------------------------
+    ---------------------------------------- Thermal 1 -------------------------
         TaskStartScenarioInPlace(ped, "PROP_HUMAN_BUM_BIN", 0, 1)
         Citizen.Wait(7000)
         ClearPedTasks(ped)
@@ -418,7 +449,7 @@ AddEventHandler("toffleeca:usethermal", function(entity, coordtp, coordsearch)
         SetEntityCollision(bomba, false, true)
         AttachEntityToEntity(bomba, entity, 15352, 0.9, 0.0, 0, 0.0, 90.0, 90.0, true, true, false, true, 1, true)
         FreezeEntityPosition(bomba, true)
-    ---------------------------------------- Charge 2 -------------------------
+    ---------------------------------------- Thermal 2 -------------------------
         TaskStartScenarioInPlace(ped, "PROP_HUMAN_BUM_BIN", 0, 1)
         Citizen.Wait(7000)
         ClearPedTasks(ped)
@@ -427,7 +458,7 @@ AddEventHandler("toffleeca:usethermal", function(entity, coordtp, coordsearch)
         AttachEntityToEntity(bomba2, entity, 15352, 1.12, 0.0, 0.30, 0.0, 90.0, 90.0, true, true, false, true, 1, true)
         FreezeEntityPosition(bomba2, true)
         Citizen.Wait(1500)
-    ---------------------------------------- TP joueur -------------------------
+    ---------------------------------------- TP Player -------------------------
         FreezeEntityPosition(ped, false)
         DoScreenFadeOut(2000)
         Citizen.Wait(2000)
@@ -444,9 +475,9 @@ AddEventHandler("toffleeca:usethermal", function(entity, coordtp, coordsearch)
         TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 20000, 36, 1, 0, 0, 0)
         TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 20000, 49, 1, 0, 0, 0)
         Citizen.Wait(20000)
-        DeleteEntity(bomba) ------ suppression charges
-        DeleteEntity(bomba2) ------ suppression charges
-    ---------------------------------------- Ouverture porte -------------------------
+        DeleteEntity(bomba) ------ Delte charges
+        DeleteEntity(bomba2) ------ Delete charges
+    ---------------------------------------- Opening door -------------------------
         TriggerServerEvent("toffleeca:opendoor_s", coordsearch)
         ClearPedTasks(ped)
         FreezeEntityPosition(ped, false)
@@ -457,9 +488,12 @@ AddEventHandler("toffleeca:thermiteall_c", function(ptfx)
     SetPtfxAssetNextCall("scr_ornate_heist")
     local effect = StartParticleFxLoopedAtCoord("scr_heist_ornate_thermal_burn", ptfx.x - 0.15, ptfx.y + 4.90, ptfx.z - 0.11, 0.0, 0.0, 0.0, 5.1, false, false, false, false)
     Citizen.Wait(20000)
-    StopParticleFxLooped(effect, 0) ------ fin explision
+    StopParticleFxLooped(effect, 0) ------ stop particles
 end)
--------------------- Loot zones --------------------------------------
+
+-------------------------------------------------------------------------
+----------------------- Loot zones --------------------------------------
+-------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:forcecoffre")
 AddEventHandler("toffleeca:forcecoffre", function(entity)
@@ -503,7 +537,9 @@ AddEventHandler("toffleeca:forcecoffre", function(entity)
     end
 end)
 
--------------------- msg loot --------------------------------------
+--------------------------------------------------------------------------
+-------------------------- msg loot --------------------------------------
+--------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:noloot_c")
 AddEventHandler("toffleeca:noloot_c", function()
@@ -573,7 +609,9 @@ AddEventHandler("toffleeca:lootmoney_c", function(count)
     ------------------**fin notification**-----------------
 end)
 
--------------------- msg timer --------------------------------------
+-------------------------------------------------------------------------
+------------------------ msg timer --------------------------------------
+-------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:nottimer")
 AddEventHandler("toffleeca:nottimer", function()
@@ -592,7 +630,9 @@ AddEventHandler("toffleeca:nottimer", function()
     ------------------**fin notification**-----------------
 end)
 
--------------------- Loot zones2--------------------------------------
+-------------------------------------------------------------------------
+----------------------- Loot zones 2 ------------------------------------
+-------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:forcecoffre2")
 AddEventHandler("toffleeca:forcecoffre2", function(entity)
@@ -636,7 +676,9 @@ AddEventHandler("toffleeca:forcecoffre2", function(entity)
     end
 end)
 
--------------------- msg notnbcops --------------------------------------
+-------------------------------------------------------------------------
+------------------------ msg nbcops -------------------------------------
+-------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:notnbcops")
 AddEventHandler("toffleeca:notnbcops", function()
@@ -655,7 +697,9 @@ AddEventHandler("toffleeca:notnbcops", function()
     ------------------**fin notification**-----------------
 end)
 
--------------------- msg police --------------------------------------
+-------------------------------------------------------------------------
+------------------------- msg LSPD --------------------------------------
+-------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:msgpolice")
 AddEventHandler("toffleeca:msgpolice", function(coords)
@@ -675,7 +719,9 @@ AddEventHandler("toffleeca:msgpolice", function(coords)
     TriggerEvent('toffleeca:blipPolice', coords)
 end)
 
--------------------- blip police --------------------------------------
+-------------------------------------------------------------------------
+------------------------ blip LSPD --------------------------------------
+-------------------------------------------------------------------------
 
 RegisterNetEvent("toffleeca:blipPolice")
 AddEventHandler("toffleeca:blipPolice", function(coords)
