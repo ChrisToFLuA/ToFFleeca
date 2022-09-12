@@ -2,7 +2,7 @@
 Fleeca Robbery
 
 Hi all, an handmade script about Fleeca Robbery
-Resmon 0.00ms to 0.01ms
+- Resmon 0.00ms to 0.01ms
 
 # Dependencies
 - Esx Legacy (wasn't test on older verions)
