@@ -29,7 +29,3 @@ shared_scripts {
 	'shared/*.lua',
 	'@ox_lib/init.lua',
 }
-
-chat_theme "chat-design-v2" {
-    styleSheet = "chat-design-v2.css"
-}
