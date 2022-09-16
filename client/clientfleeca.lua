@@ -1,4 +1,3 @@
-ESX = nil
 
 local banks = {}
 local bankszone2 = {}
@@ -25,6 +24,10 @@ RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
 	ESX.PlayerData = xPlayer
 end)
+
+if GetResourceState('ox_lib') == 'started' then
+    lib.locale()
+end
 
 -- ** qtarget documentation : https://overextended.github.io/qtarget/model.html
 -- ** ox_inventory documentation : https://overextended.github.io/docs
@@ -87,7 +90,7 @@ AddEventHandler('toffleeca:menuslspd', function()
                     options = {
                         {
                             icon = "fas fa-sign-in-alt",
-                            label = "Saisir Code",
+                            label = locale('input_code'),
                             action = function(entity)
                                 TriggerServerEvent('toffleeca:opendoorlspd_s', coordlspd)
                             end,
@@ -138,7 +141,7 @@ AddEventHandler('toffleeca:menus', function()
 		        options = {
 			        {
 				        icon = "fas fa-sign-in-alt",
-				        label = "Piratage", -- hacking (step one)
+				        label = locale('hacking_inprogess'), -- hacking (step one)
                         action = function(entity)
                             TriggerServerEvent('toffleeca:timers', coord) -- verify the cooldown
                         end,
@@ -151,7 +154,7 @@ AddEventHandler('toffleeca:menus', function()
 	        options = {
 		        {
 			        icon = "fas fa-box-circle-check",
-			        label = "Utiliser Thermite", -- use thermal charge on the door (step two)
+			        label = locale('use_thermite'), -- use thermal charge on the door (step two)
                     action = function(entity)
                         local coordsearch = GetEntityCoords(PlayerPedId())
                         TriggerEvent('toffleeca:usethermalverif', entity, coordtp, coordsearch)
@@ -200,7 +203,7 @@ AddEventHandler('toffleeca:menus', function()
 		        options = {
 			        {
 				        icon = "fas fa-sign-in-alt",
-				        label = "Forcer un coffre",
+				        label = locale('break_chest'),
                         action = function(entity)
                             TriggerEvent('toffleeca:forcecoffre')
                         end,
@@ -218,7 +221,7 @@ AddEventHandler('toffleeca:menus', function()
         options = {
             {
                 icon = "fas fa-box-circle-check",
-                label = "Forcer la serrure",
+                label = locale('force_lock'),
                 action = function(entity)
                     local coordsearch2 = GetEntityCoords(PlayerPedId())
                     TriggerEvent('toffleeca:opendoor2_c', coordsearch2)
@@ -251,7 +254,7 @@ AddEventHandler('toffleeca:menus', function()
                 options = {
                     {
                         icon = "fas fa-sign-in-alt",
-                        label = "Forcer coffre",
+                        label = locale('break_chest2'),
                         action = function(entity)
                             TriggerEvent('toffleeca:forcecoffre2')
                         end,
@@ -308,7 +311,7 @@ AddEventHandler("toffleeca:opendoor2_c", function(coordsearch2)
 	Wait(59000)
 	ClearPedTasksImmediately(PlayerPedId())
     ------------------**notification**----------------------
-    lib.showTextUI('Serrure forcée', {
+    lib.showTextUI(locale('forced_lock'), {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -385,12 +388,12 @@ end)
 
 RegisterNetEvent("toffleeca:codechiffre")
 AddEventHandler("toffleeca:codechiffre", function()
-    local input = lib.inputDialog('Code carte - Dernier Chiffre', {'Code Carte'})
+    local input = lib.inputDialog(locale('card_code'), {'Code Carte'})
     if input then
         local lockerNumber = tonumber(input[1])
     end
     ------------------**notification**----------------------
-    lib.showTextUI('Code erronné - Utilisez les charges thermales', {
+    lib.showTextUI(locale('code_false'), {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -408,9 +411,9 @@ end)
 
 RegisterNetEvent("toffleeca:usethermalverif")
 AddEventHandler("toffleeca:usethermalverif", function(entity, coordtp, coordsearch)
-    if card == false then
+    if not card then
         ------------------**notification**----------------------
-        lib.showTextUI('Piratez d\'abord le terminal', {
+        lib.showTextUI(locale('hack_first'), {
             position = "top-center",
             icon = 'gun-squirt',
             style = {
@@ -423,7 +426,7 @@ AddEventHandler("toffleeca:usethermalverif", function(entity, coordtp, coordsear
         lib.hideTextUI()
         ------------------**fin notification**-----------------
     end
-    if card == true then
+    if card then
         TriggerServerEvent('toffleeca:thermal', entity, coordtp, coordsearch)
     end
 end)
@@ -503,7 +506,7 @@ AddEventHandler("toffleeca:forcecoffre", function(entity)
 	Wait(25000)
 	ClearPedTasksImmediately(PlayerPedId())
     ------------------**notification**----------------------
-    lib.showTextUI('Coffre forcé', {
+    lib.showTextUI(locale('forced_chest'), {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -522,7 +525,7 @@ AddEventHandler("toffleeca:forcecoffre", function(entity)
     TriggerServerEvent('toffleeca:loot_s', chance)
     else
         ------------------**notification**----------------------
-        lib.showTextUI('Respire, ça n\'ira pas plus vite !', {
+        lib.showTextUI(locale('spam'), {
             position = "top-center",
             icon = 'gun-squirt',
             style = {
@@ -544,7 +547,7 @@ end)
 RegisterNetEvent("toffleeca:noloot_c")
 AddEventHandler("toffleeca:noloot_c", function()
     ------------------**notification**----------------------
-    lib.showTextUI('Vous n\'avez rien trouvé ', {
+    lib.showTextUI(locale('no_find'), {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -561,7 +564,7 @@ end)
 RegisterNetEvent("toffleeca:nospace_c")
 AddEventHandler("toffleeca:nospace_c", function()
     ------------------**notification**----------------------
-    lib.showTextUI('Vous n\'avez plus de place ', {
+    lib.showTextUI(locale('inv_full'), {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -578,7 +581,7 @@ end)
 RegisterNetEvent("toffleeca:loot_c")
 AddEventHandler("toffleeca:loot_c", function(item, count)
     ------------------**notification**----------------------
-    lib.showTextUI('Vous avez trouvé '..count..' '..item, {
+    lib.showTextUI(locale('loot')..count..' '..item, {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -595,7 +598,7 @@ end)
 RegisterNetEvent("toffleeca:lootmoney_c")
 AddEventHandler("toffleeca:lootmoney_c", function(count)
     ------------------**notification**----------------------
-    lib.showTextUI('Vous avez trouvé '..count..' $', {
+    lib.showTextUI(locale('loot')..count..' $', {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -616,7 +619,7 @@ end)
 RegisterNetEvent("toffleeca:nottimer")
 AddEventHandler("toffleeca:nottimer", function()
     ------------------**notification**----------------------
-    lib.showTextUI('Braquage déjà en cours, revenez plus tard', {
+    lib.showTextUI(locale('robbing_inprogress'), {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -661,7 +664,7 @@ AddEventHandler("toffleeca:forcecoffre2", function(entity)
     TriggerServerEvent('toffleeca:loot2_s', chance2)
     else
         ------------------**notification**----------------------
-        lib.showTextUI('Respire, ça n\'ira pas plus vite !', {
+        lib.showTextUI(locale('spam'), {
             position = "top-center",
             icon = 'gun-squirt',
             style = {
@@ -683,7 +686,7 @@ end)
 RegisterNetEvent("toffleeca:notnbcops")
 AddEventHandler("toffleeca:notnbcops", function()
     ------------------**notification**----------------------
-    lib.showTextUI('Braquage compromis, revenez plus tard', {
+    lib.showTextUI(locale('no_cops') {
         position = "top-center",
         icon = 'gun-squirt',
         style = {
@@ -704,7 +707,7 @@ end)
 RegisterNetEvent("toffleeca:msgpolice")
 AddEventHandler("toffleeca:msgpolice", function(coords)
     ------------------**notification**----------------------
-    lib.showTextUI('Braquage en cours - Position GPS de l\'alarme dans 30s', {
+    lib.showTextUI(locale('alarm_notify'), {
         position = "top-center",
         icon = 'gun-squirt',
         style = {

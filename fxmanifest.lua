@@ -10,22 +10,18 @@ author       'ChrisToF29380'
 repository   'https://github.com/ChrisToFLuA/ToFFleeca'
 
 server_scripts {
-	'@mysql-async/lib/MySQL.lua',
 	'server/*.lua'
 }
 
 client_scripts {
-	'@PolyZone/client.lua',
-	'@PolyZone/BoxZone.lua',
-	'@PolyZone/EntityZone.lua',
-	'@PolyZone/CircleZone.lua',
-	'@PolyZone/ComboZone.lua',
 	'client/*.lua',
 }
 
+files{
+    'locale/en.json'
+}
+
 shared_scripts {
-	'@es_extended/locale.lua',
-	'locales/fr.lua',
-	'shared/*.lua',
+	'@es_extended/imports.lua',
 	'@ox_lib/init.lua',
 }
