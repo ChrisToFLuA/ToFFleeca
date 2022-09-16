@@ -3,8 +3,8 @@ games {'gta5'}
 
 lua54 'yes'
 
-name         'toffleeca'
-version      '1.0.0'
+name         'ToFFleeca'
+version      '1.0.1'
 description  'Fleeca Robbery system'
 author       'ChrisToF29380'
 repository   'https://github.com/ChrisToFLuA/ToFFleeca'
