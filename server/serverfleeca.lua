@@ -2,6 +2,9 @@ local mincops = 0  --- nb minimum de lspd en ville
 local lastrob = 0
 local nextrob = 0
 local cd = 3600000 --- cooldown
+
+lib.versionCheck('ChrisToFLuA/ToFFleeca')
+
 ---------------------------------------------------------------------------------
 
 -- ** qtarget documentation : https://overextended.github.io/qtarget/model.html
