@@ -9,19 +9,21 @@ description  'Fleeca Robbery system'
 author       'ChrisToF29380'
 repository   'https://github.com/ChrisToFLuA/ToFFleeca'
 
+dependency 'ox_lib'
+
+shared_scripts {
+	'@es_extended/imports.lua',
+	'@ox_lib/init.lua'
+}
+
 server_scripts {
 	'server/*.lua'
 }
 
 client_scripts {
-	'client/*.lua',
+	'client/*.lua'
 }
 
 files{
-    'locale/en.json'
-}
-
-shared_scripts {
-	'@es_extended/imports.lua',
-	'@ox_lib/init.lua',
+    'locales/*.json'
 }
