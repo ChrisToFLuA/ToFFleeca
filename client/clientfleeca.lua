@@ -7,27 +7,19 @@ local code = ko
 local door = closed
 local nextCoffre = 0
 
-Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
-	end
-    Wait(500)
-	while PlayerData == nil do
-        PlayerData = ESX.GetPlayerData()
-        Wait(10)
-    end	
-
-end)
+lib.locale()
 
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
 	ESX.PlayerData = xPlayer
+	ESX.PlayerLoaded = true
 end)
 
-if GetResourceState('ox_lib') == 'started' then
-    lib.locale()
-end
+RegisterNetEvent('esx:onPlayerLogout')
+AddEventHandler('esx:onPlayerLogout', function()
+	ESX.PlayerLoaded = false
+	ESX.PlayerData = {}
+end)
 
 -- ** qtarget documentation : https://overextended.github.io/qtarget/model.html
 -- ** ox_inventory documentation : https://overextended.github.io/docs
@@ -38,7 +30,7 @@ end
 ------------------------------------------------------------------------------
 
 AddEventHandler('esx:onPlayerSpawn', function()
-    Citizen.Wait(30000)
+    Citizen.Wait(2000)
     Citizen.CreateThread(function()
         -- you can modify / add jobs here --
         local jobs = {
