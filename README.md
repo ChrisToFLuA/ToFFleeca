@@ -19,6 +19,42 @@ Preview Video : https://youtu.be/rW0WUJtRnpI
 - black money
 it can be easily modified in the server file
 
+**for the fleeca items, u can add these to the file \ox_inventory\data\items.lua  (check if they doesn't exist before add lines)**
+```
+    ['thermalcharge'] = {
+        label = 'Charge Thermique', -- put your translation here
+        weight = 1000,
+        stack = true,
+        close = false,
+        description = nil
+    },  
+    --------------------------------------------------------------------------
+    ['id_card_f'] = {
+            label = 'carte d\'accès piratée',  -- put your translation here
+            weight = 150,
+            stack = true,
+            close = false,
+            description = nil
+    },
+    --------------------------------------------------------------------------
+    ['jewels'] = {
+		        label = 'Bijoux',
+		        weight = 250,
+		        stack = true,
+		        close = false,
+		        description = nil
+	  },
+    --------------------------------------------------------------------------
+    ['goldingot'] = {
+            label = 'Lingot d\'Or',  -- put your translation here
+            weight = 1000,
+            stack = true,
+              close = false,
+              description = nil
+    }, 
+        --**(if it's the last item of the file items.lua, delete the coma)**
+```
+
 two different zones to loot whith different items
 ### first zone (black_money, jewels, cards)
 The door to access to the second room need to be forced too
