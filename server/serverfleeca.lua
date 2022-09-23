@@ -114,7 +114,7 @@ AddEventHandler('toffleeca:loot_s', function(chance)
         end
     end
     if chance < 13 and chance > 7 then
-        local item = locale('jewels')       -- label item jewels
+        local item = 'jewels'       -- label item jewels
         if exports.ox_inventory:CanCarryItem(xPlayer.source, 'jewels', count) then      -- check cancarry items
             exports.ox_inventory:AddItem(xPlayer.source, 'jewels', count)
             TriggerClientEvent('toffleeca:loot_c', xPlayer.source, item, count)
