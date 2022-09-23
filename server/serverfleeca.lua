@@ -137,7 +137,7 @@ AddEventHandler('toffleeca:loot2_s', function(chance2)
         TriggerClientEvent('toffleeca:noloot_c', xPlayer.source)
     end
     if chance2 > 7 then
-        local item = locale('ingot')       -- label item goldingot
+        local item = 'ingot'       -- label item goldingot
         if exports.ox_inventory:CanCarryItem(xPlayer.source, 'goldingot', count) then       -- check cancarry item
             exports.ox_inventory:AddItem(xPlayer.source, 'goldingot', count)
             TriggerClientEvent('toffleeca:loot_c', xPlayer.source, item, count)

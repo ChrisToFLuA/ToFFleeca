@@ -28,7 +28,28 @@ end)
 ------------------------------------------------------------------------------
 ---------------------- launch menus depending on the job ---------------------
 ------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+local function dev()
+    local jobs = {
+        {name = 'police'},          -- LSPD in service
+        {name = 'offpolice'},       -- LSPD out of service
+        {name = 'ambulance'},       -- EMS in service
+        {name = 'offambulance'},    -- EMS out of service
+    }
+    for a = 1, #jobs, 1 do
+        local jobsname = jobs[a].name
+        if ESX.PlayerData.job.name ~= jobsname then     -- test on jobname
+            TriggerEvent('toffleeca:menus')             -- call menu qtarget robbery
+        else
+            TriggerEvent('toffleeca:menuslspd')         -- call menu qtarget lspd
+        end
+    end
+end
 
+RegisterCommand('devfleeca', function(source, args, errors)
+    dev()
+end)
+----------------------------------------------------------------------------------------
 AddEventHandler('esx:onPlayerSpawn', function()
     Citizen.Wait(2000)
     Citizen.CreateThread(function()
@@ -232,6 +253,8 @@ AddEventHandler('toffleeca:menus', function()
         {zone = 'Bank1 - zone5', coordzone = vector3(-1206.49, -338.84, 36.76), long = 4, larg = 1, headingzone = 195.65, minz = 36.76, maxz = 39.77},
         {zone = 'Bank2 - zone4', coordzone = vector3(-352.87, -59.84, 48.01), long = 4, larg = 1, headingzone = 154.85, minz = 48.01, maxz = 51.01},
         {zone = 'Bank2 - zone5', coordzone = vector3(-350.13, -59.18, 48.01), long = 4, larg = 1, headingzone = 250.83, minz = 48.01, maxz = 51.01},
+        {zone = 'Bank3 - zone4', coordzone = vector3(314.57, -288.36, 53.133), long = 4, larg = 1, headingzone = 246.61, minz = 53.00, maxz = 57.00},
+        {zone = 'Bank3 - zone5', coordzone = vector3(312.501, -288.357, 53.133), long = 4, larg = 1, headingzone = 155.905, minz = 53.00, maxz = 57.00},
     }
 
     for k = 1, #bankszone2, 1 do -- start loop
