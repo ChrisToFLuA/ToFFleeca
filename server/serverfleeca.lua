@@ -36,7 +36,6 @@ AddEventHandler('toffleeca:nbcops', function(source, coords, coordsearch)
 	local copsOnline = ESX.GetExtendedPlayers('job', 'police')
 
     if #copsOnline >= mincops then
-        lastrob = GetGameTimer()
         for j=1, #copsOnline, 1 do
             local xPlayerx = copsOnline[j]
             TriggerClientEvent('toffleeca:msgpolice', xPlayerx.source)
@@ -54,8 +53,9 @@ AddEventHandler('toffleeca:card', function(source, coordsearch)
     if card.count > 0 then
         TriggerClientEvent('toffleeca:usecard', xPlayer.source, coordsearch)
 		exports.ox_inventory:RemoveItem(xPlayer.source, 'id_card_f', 1)     -- remove id_card_f from inventory player
+        lastrob = GetGameTimer()
     else
-        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Vous n\'avez pas de Carte d\'identification')       -- notification no card     
+        TriggerClientEvent('esx:showNotification', xPlayer.source, 'You don\'t have id card')       -- notification no card     
     end
 end)
 
@@ -67,7 +67,7 @@ AddEventHandler('toffleeca:thermal', function(entity, coordtp, coordsearch)
         TriggerClientEvent('toffleeca:usethermal', xPlayer.source, entity, coordtp, coordsearch)
 		exports.ox_inventory:RemoveItem(xPlayer.source, 'thermalcharge', 2)         -- remove thermalcharge from inventory
     else
-        TriggerClientEvent('esx:showNotification', xPlayer.source, locale('no_thermal'))       -- notification no thermalcharge
+        TriggerClientEvent('esx:showNotification', xPlayer.source, 'Not enough thermal charge on you')       -- notification no thermalcharge
     end
 end)
 
