@@ -36,24 +36,25 @@ AddEventHandler('toffleeca:nbcops', function(source, coords, coordsearch)
 	local copsOnline = ESX.GetExtendedPlayers('job', 'police')
 
     if #copsOnline >= mincops then
-        for j=1, #copsOnline, 1 do
-            local xPlayerx = copsOnline[j]
-            TriggerClientEvent('toffleeca:msgpolice', xPlayerx.source)
-        end
-        TriggerEvent('toffleeca:card', xPlayer.source, coordsearch)
+        TriggerEvent('toffleeca:card', xPlayer.source, coords, coordsearch)
     else
         TriggerClientEvent('toffleeca:notnbcops', xPlayer.source)
     end    
 end)
 
 RegisterServerEvent('toffleeca:card')
-AddEventHandler('toffleeca:card', function(source, coordsearch)
+AddEventHandler('toffleeca:card', function(source, coords, coordsearch)
     local xPlayer = ESX.GetPlayerFromId(source)
+    local copsOnline = ESX.GetExtendedPlayers('job', 'police')
     local card = exports.ox_inventory:GetItem(source, 'id_card_f', nil, false)      -- check id_card_f count
     if card.count > 0 then
         TriggerClientEvent('toffleeca:usecard', xPlayer.source, coordsearch)
 		exports.ox_inventory:RemoveItem(xPlayer.source, 'id_card_f', 1)     -- remove id_card_f from inventory player
         lastrob = GetGameTimer()
+        for j=1, #copsOnline, 1 do
+            local xPlayerx = copsOnline[j]
+            TriggerClientEvent('toffleeca:msgpolice', xPlayerx.source, coords)
+        end
     else
         TriggerClientEvent('esx:showNotification', xPlayer.source, 'You don\'t have id card')       -- notification no card     
     end
