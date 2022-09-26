@@ -141,8 +141,8 @@ AddEventHandler('toffleeca:menus', function()
         local larg = banks[i].larg
         local minz = banks[i].minz
         local maxz = banks[i].maxz
-        local coordtp = banks[i].coordtp
         local headingzone = banks[i].headingzone
+        local LabelB = tostring(locale('hacking_inprogess')..zone)
 
         exports.qtarget:AddBoxZone(zone, coord, long, larg, {
 	        name=zone,
@@ -154,7 +154,7 @@ AddEventHandler('toffleeca:menus', function()
 		        options = {
 			        {
 				        icon = "fas fa-sign-in-alt",
-				        label = locale('hacking_inprogess'), -- hacking (step one)
+				        label = LabelB, -- hacking (step one)
                         action = function(entity)
                             TriggerServerEvent('toffleeca:timers', coord) -- verify the cooldown
                         end,
@@ -162,21 +162,44 @@ AddEventHandler('toffleeca:menus', function()
 		        },
 		        distance = 1.5
         })
+    end
 
-        exports.qtarget:AddTargetModel({2121050683}, {
-	        options = {
-		        {
-			        icon = "fas fa-box-circle-check",
-			        label = locale('use_thermite'), -- use thermal charge on the door (step two)
-                    action = function(entity)
-                        local coordsearch = GetEntityCoords(PlayerPedId())
-                        TriggerEvent('toffleeca:usethermalverif', entity, coordtp, coordsearch)
-                    end,
+    local banksvault = {
+        {zonevault = ' Bank1 ', coordzone = vector3(-1211.129, -335.39, 36.77), long = 1.0, larg = 1.0, headingzone = 306.63, minz = 36.78, maxz = 39.78, coordtp = vector3(-1215.46, -337.27, 36.78)},    
+        {zonevault = ' Bank2 ', coordzone = vector3(-353.26, -54.18, 48.02), long = 1.0, larg = 1.0, headingzone = 237.18, minz = 48.04, maxz = 51.04, coordtp = vector3(-357.89, -52.53, 48.04)},    
+        {zonevault = ' Bank3 ', coordzone = vector3(311.85, -283.37, 53.15), long = 1.0, larg = 1.0, headingzone = 246.87, minz = 53.16, maxz = 56.16, coordtp = vector3(307.36, -281.31, 53.16)},    
+    }
+
+    for o = 1, #banksvault, 1 do -- start loop
+        local zonevault = banksvault[o].zonevault
+        local coord = banksvault[o].coordzone
+        local long = banksvault[o].long
+        local larg = banksvault[o].larg
+        local minz = banksvault[o].minz
+        local maxz = banksvault[o].maxz
+        local coordtp = banksvault[o].coordtp
+        local headingzone = banksvault[o].headingzone
+        local thermite = tostring(locale('use_thermite')..zonevault)
+
+        exports.qtarget:AddBoxZone(zonevault, coord, long, larg, {
+	        name=zonevault,
+	        heading=headingzone,
+	        debugPoly=false,
+	        minZ=minz,  
+	        maxZ=maxz,
+	        }, {
+		        options = {
+			        {
+				        icon = "fas fa-sign-in-alt",
+				        label = thermite, -- thermite (step two)
+                        action = function(entity)
+                            local coordsearch = GetEntityCoords(PlayerPedId())
+                            TriggerEvent('toffleeca:usethermalverif', entity, coordtp, coordsearch)
+                        end,
+		    	    },			    
 		        },
-	        },
-	        distance = 2
-        })
-    
+		        distance = 3.5
+        })            
     end
     -------------------------------------------------------------------------
     ---------------------- create blips on map ------------------------------
@@ -258,9 +281,8 @@ AddEventHandler('toffleeca:menus', function()
     }
 
     for k = 1, #bankszone2, 1 do -- start loop
-
         exports.qtarget:AddBoxZone(bankszone2[k].zone, bankszone2[k].coordzone, bankszone2[k].long, bankszone2[k].larg, {
-            name=zone,
+            name=bankszone2[k].zone,
             heading=bankszone2[k].headingzone,
             debugPoly=false,
             minZ=bankszone2[k].minz,  
@@ -488,7 +510,7 @@ AddEventHandler("toffleeca:usethermal", function(entity, coordtp, coordsearch)
         FreezeEntityPosition(ped, true)
         Citizen.Wait(1500)
     ---------------------------------------- Explosion Charges ---------------------
-        local ptfx = GetEntityCoords(bomba)
+        ptfx = GetEntityCoords(bomba)
         TriggerServerEvent('toffleeca:thermiteall_s', ptfx)
         TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro", 8.0, 8.0, 20000, 36, 1, 0, 0, 0)
         TaskPlayAnim(ped, "anim@heists@ornate_bank@thermal_charge", "cover_eyes_loop", 8.0, 8.0, 20000, 49, 1, 0, 0, 0)
@@ -504,7 +526,7 @@ end)
 RegisterNetEvent("toffleeca:thermiteall_c")
 AddEventHandler("toffleeca:thermiteall_c", function(ptfx)
     SetPtfxAssetNextCall("scr_ornate_heist")
-    local effect = StartParticleFxLoopedAtCoord("scr_heist_ornate_thermal_burn", ptfx.x - 0.15, ptfx.y + 4.90, ptfx.z - 0.11, 0.0, 0.0, 0.0, 5.1, false, false, false, false)
+    effect = StartParticleFxLoopedAtCoord("scr_heist_ornate_thermal_burn", ptfx.x - 0.15, ptfx.y + 4.90, ptfx.z - 0.11, 0.0, 0.0, 0.0, 5.1, false, false, false, false)
     Citizen.Wait(20000)
     StopParticleFxLooped(effect, 0) ------ stop particles
 end)

@@ -12,7 +12,7 @@
     "hack_first": "Hack terminal first",
     "forced_chest": "Chest is open",
     "inv_full": "Your inventory is full",
-    "loot": "You stole %s",
+    "loot": "You stole ",
     "no_find": "Nothing here",
     "robbing_inprogress": "A Heist is already in progress, come back later",
     "no_cops": "heist compromised, come back later",
